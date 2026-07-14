@@ -121,7 +121,7 @@ POST /entregas
 ### Validações
 
 * Origem obrigatória
-* Destino obrigatório
+* Destino obrigatória
 * Motorista deve existir
 * Veículo deve existir
 
@@ -218,3 +218,143 @@ Resultado esperado:
 
 * Registro removido com sucesso
 * Retornar mensagem de confirmação
+
+---
+
+# Casos de Teste (CT)
+
+## CT01 - Cadastro de Motorista
+
+### 1. Nível do Teste
+
+Sistema
+
+### 2. Pré-condição
+
+* API em execução.
+* Banco de dados disponível.
+* O CPF informado não deve existir no banco.
+
+### 3. Dados de Entrada / Payload
+
+```json
+{
+  "nome": "Carlos Silva",
+  "cpf": "12345678900",
+  "telefone": "49999999999"
+}
+```
+
+### 4. Passos de Execução
+
+1. Iniciar a aplicação.
+2. Enviar uma requisição **POST** para `/motoristas`.
+3. Informar o JSON de entrada.
+4. Enviar a requisição.
+5. Verificar a resposta da API.
+6. Consultar o banco de dados para confirmar o cadastro.
+
+### 5. Resultado Esperado
+
+* Status Code **201 (Created)**.
+* Retornar:
+
+```json
+{
+  "id": 1,
+  "nome": "Carlos Silva",
+  "mensagem": "Motorista cadastrado com sucesso"
+}
+```
+
+* O motorista deve ser salvo corretamente no banco de dados.
+
+---
+
+## CT02 - Bloqueio de CPF Duplicado
+
+### 1. Nível do Teste
+
+Sistema
+
+### 2. Pré-condição
+
+* Já existe um motorista cadastrado com CPF **12345678900**.
+
+### 3. Dados de Entrada / Payload
+
+```json
+{
+  "nome": "Carlos Silva",
+  "cpf": "12345678900",
+  "telefone": "49999999999"
+}
+```
+
+### 4. Passos de Execução
+
+1. Confirmar que existe um motorista cadastrado com esse CPF.
+2. Enviar uma requisição **POST** para `/motoristas`.
+3. Informar o mesmo CPF já cadastrado.
+4. Enviar a requisição.
+5. Verificar a resposta da API.
+6. Confirmar que nenhum novo registro foi criado.
+
+### 5. Resultado Esperado
+
+* Status Code **400 (Bad Request)** ou **409 (Conflict)**.
+* Mensagem informando que o CPF já está cadastrado.
+* Nenhum novo motorista deve ser inserido no banco de dados.
+
+---
+
+## CT03 - Cadastro de Entrega
+
+### 1. Nível do Teste
+
+Integração
+
+### 2. Pré-condição
+
+* Motorista cadastrado com ID **1**.
+* Veículo cadastrado com ID **1**.
+* API em execução.
+* Banco de dados disponível.
+
+### 3. Dados de Entrada / Payload
+
+```json
+{
+  "descricao": "Carga Eletrônicos",
+  "origem": "Joinville",
+  "destino": "Curitiba",
+  "motoristaId": 1,
+  "veiculoId": 1
+}
+```
+
+### 4. Passos de Execução
+
+1. Confirmar que o motorista existe.
+2. Confirmar que o veículo existe.
+3. Enviar uma requisição **POST** para `/entregas`.
+4. Informar o JSON de entrada.
+5. Enviar a requisição.
+6. Verificar a resposta da API.
+7. Consultar o banco de dados para confirmar o cadastro da entrega.
+
+### 5. Resultado Esperado
+
+* Status Code **201 (Created)**.
+* Retornar:
+
+```json
+{
+  "id": 1,
+  "status": "Pendente",
+  "mensagem": "Entrega criada com sucesso"
+}
+```
+
+* A entrega deve ser salva no banco de dados.
+* A entrega deve estar vinculada ao motorista e ao veículo informados.
