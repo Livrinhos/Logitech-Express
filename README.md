@@ -1,20 +1,20 @@
 ````markdown
-# LogiTech Express - Backend
+LogiTech Express - Backend
 
 Backend da plataforma LogiTech Express, responsável pelo gerenciamento de motoristas, veículos, rotas e entregas.
 
-## Objetivo
+Objetivo
 
 Estruturar uma arquitetura escalável e organizada para suportar as operações logísticas da empresa, garantindo integridade dos dados, facilidade de manutenção e segurança das informações.
 
-## Arquitetura
+Arquitetura
 
 O projeto segue os padrões:
 
 - MVC (Model-View-Controller)
 - Repository Pattern
 
-### Estrutura
+Estrutura
 
 ```text
 src/
@@ -27,7 +27,7 @@ src/
 └── app.js
 ````
 
-## Instalação local
+Instalação local
 
 ### Requisitos
 
@@ -36,7 +36,7 @@ src/
 * MySQL
 * Git
 
-### 1. Clonar o repositório
+1. Clonar o repositório
 
 ```text
 git clone https://github.com/LivrInhos/Logitech-Express.git
@@ -48,13 +48,13 @@ Entre na pasta do projeto:
 cd Logitech-Express
 ```
 
-### 2. Instalar as dependências
+2. Instalar as dependências
 
 ```text
 npm install
 ```
 
-### 3. Configurar o banco de dados
+3. Configurar o banco de dados
 
 O projeto possui o arquivo:
 
@@ -66,7 +66,7 @@ Importe esse arquivo no MySQL para criar a estrutura do banco de dados.
 
 Certifique-se de que o MySQL esteja em execução.
 
-### 4. Configurar o arquivo .env
+4. Configurar o arquivo .env
 
 Utilize o arquivo `.env.example` como modelo e crie um arquivo `.env` na raiz do projeto.
 
@@ -85,7 +85,7 @@ Configure os valores de acordo com o seu ambiente.
 
 O arquivo `.env` não deve ser versionado.
 
-### 5. Iniciar a aplicação
+5. Iniciar a aplicação
 
 Execute:
 
@@ -101,7 +101,7 @@ A aplicação estará disponível em:
 http://localhost:3000
 ```
 
-### 6. Acessar o sistema
+6. Acessar o sistema
 
 Abra no navegador:
 
@@ -111,7 +111,7 @@ http://localhost:3000/
 
 O frontend está localizado na pasta `public/`.
 
-### 7. Verificar a API
+7. Verificar a API
 
 Acesse:
 
@@ -128,9 +128,9 @@ Resposta esperada:
 }
 ```
 
-## Endpoints
+Endpoints
 
-### Motoristas
+Motoristas
 
 * GET /motoristas
 * GET /motoristas/:id
@@ -138,7 +138,7 @@ Resposta esperada:
 * PUT /motoristas/:id
 * DELETE /motoristas/:id
 
-### Veículos
+Veículos
 
 * GET /veiculos
 * GET /veiculos/:id
@@ -146,7 +146,7 @@ Resposta esperada:
 * PUT /veiculos/:id
 * DELETE /veiculos/:id
 
-### Entregas
+Entregas
 
 * GET /entregas
 * GET /entregas/:id
@@ -154,7 +154,7 @@ Resposta esperada:
 * PUT /entregas/:id
 * DELETE /entregas/:id
 
-## Segurança
+Segurança
 
 As credenciais do sistema devem ser armazenadas em variáveis de ambiente através do arquivo `.env`.
 
