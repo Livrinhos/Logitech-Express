@@ -16,7 +16,6 @@ O projeto segue os padrões:
 
 Estrutura
 
-```text
 src/
 ├── config/
 ├── controllers/
