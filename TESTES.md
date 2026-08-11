@@ -86,6 +86,7 @@ Verificar se um motorista é cadastrado corretamente quando todos os dados obrig
 * Motorista cadastrado.
 * Mensagem de sucesso.
 * Registro salvo corretamente no banco.
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
 
 ## 9. Critério de Aprovação
 
@@ -139,6 +140,7 @@ Existe um motorista cadastrado com CPF **12345678900**.
 * HTTP 400 ou HTTP 409.
 * Mensagem informando CPF duplicado.
 * Nenhum novo registro criado.
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
 
 ## 9. Critério de Aprovação
 
@@ -192,6 +194,7 @@ Verificar se um veículo é cadastrado corretamente quando todos os dados obriga
 * HTTP 201.
 * Veículo cadastrado.
 * Dados persistidos.
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
 
 ## 9. Critério de Aprovação
 
@@ -250,6 +253,8 @@ Verificar se uma entrega é cadastrada corretamente utilizando um motorista e um
 * Entrega cadastrada.
 * Status inicial "Pendente".
 * Associação correta entre motorista e veículo.
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
+
 
 ## 9. Critério de Aprovação
 
@@ -301,10 +306,12 @@ Verificar se o status de uma entrega pode ser atualizado corretamente.
 
 * HTTP 200.
 * Status alterado para "Em Transporte".
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
 
 ## 9. Critério de Aprovação
 
 O teste será aprovado caso a alteração seja persistida corretamente no banco de dados.
+
 
 ---
 
@@ -346,6 +353,7 @@ GET /motoristas/1
 
 * HTTP 200 para ID existente.
 * HTTP 404 para ID inexistente.
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
 
 ## 9. Critério de Aprovação
 
@@ -446,6 +454,7 @@ Verificar se a regra de validação impede a criação de uma entrega quando os 
 
 * Erro de validação.
 * Entrega não criada.
+* ✅ PASSED (Passou): O sistema se comportou exatamente como o esperado
 
 ## 9. Critério de Aprovação
 
