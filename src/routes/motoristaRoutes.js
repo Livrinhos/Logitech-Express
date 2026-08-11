@@ -1,23 +1,9 @@
-// Responsável pelas operações de banco de dados dos veículos.
-// Realiza consultas e manipulação dos registros.
-// Define as rotas da API relacionadas aos motoristas.
-
 const express = require('express');
+const controller = require('../controllers/motoristaController');
 const router = express.Router();
-
-// Listar motoristas
-router.get('/motoristas');
-
-// Buscar motorista por ID
-router.get('/motoristas/:id');
-
-// Cadastrar motorista
-router.post('/motoristas');
-
-// Atualizar motorista
-router.put('/motoristas/:id');
-
-// Excluir motorista
-router.delete('/motoristas/:id');
-
+router.get('/motoristas', controller.list);
+router.get('/motoristas/:id', controller.get);
+router.post('/motoristas', controller.create);
+router.put('/motoristas/:id', controller.update);
+router.delete('/motoristas/:id', controller.remove);
 module.exports = router;

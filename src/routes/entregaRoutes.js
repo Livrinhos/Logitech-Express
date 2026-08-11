@@ -1,14 +1,11 @@
-// Define as rotas da API relacionadas às entregas.
-// Responsável pelo mapeamento dos endpoints de entregas.
-// Define as rotas da API relacionadas às entregas.
-
 const express = require('express');
+const controller = require('../controllers/entregaController');
+const service = require('../services/entregaService');
 const router = express.Router();
-
-router.get('/entregas');
-router.get('/entregas/:id');
-router.post('/entregas');
-router.put('/entregas/:id');
-router.delete('/entregas/:id');
-
+router.get('/entregas', controller.list);
+router.get('/entregas/:id', controller.get);
+router.post('/entregas', controller.create);
+router.put('/entregas/:id/status', async (req, res, next) => { try { const { ok } = require('../utils'); ok(res, await service.updateStatus(req.params.id, req.body.status), 'Status atualizado com sucesso'); } catch (e) { next(e); } });
+router.put('/entregas/:id', controller.update);
+router.delete('/entregas/:id', controller.remove);
 module.exports = router;

@@ -1,2 +1,14 @@
-// Responsável pelas operações de banco de dados das entregas.
-// Centraliza o acesso às tabelas relacionadas às entregas.
+const db = require('../config/database');
+const fields = `e.id_entrega AS id, e.descricao, r.origem, r.destino, e.status, e.data_criacao AS dataCriacao, e.data_prevista AS dataPrevista, e.data_conclusao AS dataConclusao, e.id_motorista AS motoristaId, e.id_veiculo AS veiculoId, m.nome AS motoristaNome, v.placa AS veiculoPlaca`;
+const join = 'FROM Entrega e LEFT JOIN Rota r ON r.id_rota = e.id_rota LEFT JOIN Motorista m ON m.id_motorista = e.id_motorista LEFT JOIN Veiculo v ON v.id_veiculo = e.id_veiculo';
+async function findAll() { return db.query(`SELECT ${fields} ${join} ORDER BY e.id_entrega DESC`); }
+async function findById(id) { const rows = await db.query(`SELECT ${fields} ${join} WHERE e.id_entrega = ?`, [id]); return rows[0] || null; }
+async function create(data) {
+  const pool = db.getPool(); const conn = await pool.getConnection();
+  try { await conn.beginTransaction(); const [rota] = await conn.execute('INSERT INTO Rota (origem, destino) VALUES (?, ?)', [data.origem, data.destino]); const [entrega] = await conn.execute('INSERT INTO Entrega (data_criacao, status, descricao, id_motorista, id_veiculo, id_rota) VALUES (CURDATE(), ?, ?, ?, ?, ?)', [data.status || 'Pendente', data.descricao || null, data.motoristaId, data.veiculoId, rota.insertId]); await conn.execute('INSERT INTO Atualizacao_Entrega (id_entrega, status, data_hora, observacao) VALUES (?, ?, NOW(), ?)', [entrega.insertId, data.status || 'Pendente', 'Entrega criada']); await conn.commit(); return findById(entrega.insertId); } catch (e) { await conn.rollback(); throw e; } finally { conn.release(); }
+}
+async function update(id, data) { const current = await findById(id); await db.query('UPDATE Rota SET origem = ?, destino = ? WHERE id_rota = (SELECT id_rota FROM Entrega WHERE id_entrega = ?)', [data.origem, data.destino, id]); await db.query('UPDATE Entrega SET descricao = ?, status = ?, id_motorista = ?, id_veiculo = ? WHERE id_entrega = ?', [data.descricao || null, data.status || current.status, data.motoristaId, data.veiculoId, id]); if (data.status && data.status !== current.status) await addStatusHistory(id, data.status, 'Status atualizado'); return findById(id); }
+async function updateStatus(id, status) { await db.query('UPDATE Entrega SET status = ?, data_conclusao = IF(? = "Entregue", CURDATE(), data_conclusao) WHERE id_entrega = ?', [status, status, id]); await addStatusHistory(id, status, 'Status atualizado'); return findById(id); }
+async function addStatusHistory(id, status, observacao) { return db.query('INSERT INTO Atualizacao_Entrega (id_entrega, status, data_hora, observacao) VALUES (?, ?, NOW(), ?)', [id, status, observacao]); }
+async function remove(id) { const result = await db.query('DELETE FROM Entrega WHERE id_entrega = ?', [id]); return result.affectedRows > 0; }
+module.exports = { findAll, findById, create, update, updateStatus, remove };
