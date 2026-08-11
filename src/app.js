@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
@@ -9,28 +8,56 @@ const veiculoRoutes = require('./routes/veiculoRoutes');
 const entregaRoutes = require('./routes/entregaRoutes');
 
 const app = express();
+
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.urlencoded({ extended: true }));
 
-app.get('/health', (req, res) => res.json({ success: true, message: 'API LogiTech Express online' }));
-app.use('/api', motoristaRoutes, veiculoRoutes, entregaRoutes);
-
-app.use((req, res) => res.status(404).json({ success: false, message: 'Rota não encontrada' }));
-app.use((err, req, res, next) => {
-  const status = err.statusCode || 500;
-  const message = status === 500 ? 'Erro interno do servidor' : err.message;
-  if (status === 500) console.error(err);
-  res.status(status).json({ success: false, message });
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'API LogiTech Express online',
+  });
 });
 
-if (require.main === module) {
+app.use(motoristaRoutes);
+app.use(veiculoRoutes);
+app.use(entregaRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'Rota não encontrada',
+  });
+});
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = statusCode === 500 ? 'Erro interno do servidor' : err.message;
+
+  if (statusCode === 500) {
+    console.error(err);
+  }
+
+  res.status(statusCode).json({
+    success: false,
+    message,
+  });
+});
+
+async function startServer() {
   const port = process.env.PORT || 3000;
-  initializeDatabase()
-    .then(() => app.listen(port, () => console.log(`LogiTech Express rodando na porta ${port}`)))
-    .catch((error) => {
-      console.error('Não foi possível inicializar o banco de dados:', error.message);
-      process.exit(1);
-    });
+  await initializeDatabase();
+  app.listen(port, () => {
+    console.log(`API LogiTech Express rodando em http://localhost:${port}`);
+  });
 }
+
+if (require.main === module) {
+  startServer().catch((error) => {
+    console.error('Não foi possível iniciar a API:', error.message);
+    process.exit(1);
+  });
+}
+
 module.exports = app;
