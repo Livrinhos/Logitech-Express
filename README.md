@@ -1,6 +1,4 @@
-Claro. Aqui está no estilo anterior, **pronto para colar no `README.md`**, sem `bash`, `json`, `env` ou `text` aparecendo depois dos três acentos:
-
-```markdown
+````markdown
 # LogiTech Express - Backend
 
 Backend da plataforma LogiTech Express, responsável pelo gerenciamento de motoristas, veículos, rotas e entregas.
@@ -18,203 +16,143 @@ O projeto segue os padrões:
 
 ### Estrutura
 
-```
-
-Logitech-Express/
-├── public/
-│   ├── index.html
-│   └── app.js
-├── src/
-│   ├── config/
-│   ├── controllers/
-│   ├── models/
-│   ├── repositories/
-│   ├── routes/
-│   ├── services/
-│   └── app.js
-├── banco_logiexpress.sql
-├── .env.example
-├── .gitignore
-├── package.json
-├── package-lock.json
-├── README.md
-└── TESTES.md
-
-```
-
-## Requisitos
-
-Para executar o projeto localmente, é necessário ter instalado:
-
-- Node.js
-- npm
-- MySQL
-- Git
+```text
+src/
+├── config/
+├── controllers/
+├── models/
+├── repositories/
+├── routes/
+├── services/
+└── app.js
+````
 
 ## Instalação local
 
+### Requisitos
+
+* Node.js
+* npm
+* MySQL
+* Git
+
 ### 1. Clonar o repositório
 
-```
-
-git clone [https://github.com/LivrInhos/Logitech-Express.git](https://github.com/LivrInhos/Logitech-Express.git)
-
+```text
+git clone https://github.com/LivrInhos/Logitech-Express.git
 ```
 
 Entre na pasta do projeto:
 
-```
-
+```text
 cd Logitech-Express
-
 ```
 
 ### 2. Instalar as dependências
 
-Execute:
-
-```
-
+```text
 npm install
-
 ```
-
-Esse comando instala todas as dependências necessárias para executar o projeto.
 
 ### 3. Configurar o banco de dados
 
 O projeto possui o arquivo:
 
-```
-
+```text
 banco_logiexpress.sql
-
 ```
 
-Importe esse arquivo no MySQL para criar a estrutura necessária para o funcionamento do sistema.
+Importe esse arquivo no MySQL para criar a estrutura do banco de dados.
 
-Certifique-se de que o servidor MySQL esteja em execução.
+Certifique-se de que o MySQL esteja em execução.
 
 ### 4. Configurar o arquivo .env
 
-Crie um arquivo `.env` na raiz do projeto utilizando o `.env.example` como modelo.
+Utilize o arquivo `.env.example` como modelo e crie um arquivo `.env` na raiz do projeto.
 
 Exemplo:
 
-```
-
+```text
 PORT=3000
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
 DB_NAME=logiexpress
 CORS_ORIGIN=*
-
 ```
 
 Configure os valores de acordo com o seu ambiente.
 
-O arquivo `.env` não deve ser enviado para o GitHub.
+O arquivo `.env` não deve ser versionado.
 
-### 5. Iniciar o projeto
+### 5. Iniciar a aplicação
 
 Execute:
 
-```
-
+```text
 npm start
-
 ```
 
-O arquivo `src/app.js` será responsável por iniciar a aplicação.
+O arquivo `src/app.js` será responsável por iniciar a API.
 
-Quando a API estiver funcionando, será disponibilizada em:
+A aplicação estará disponível em:
 
+```text
+http://localhost:3000
 ```
 
-[http://localhost:3000](http://localhost:3000)
+### 6. Acessar o sistema
 
+Abra no navegador:
+
+```text
+http://localhost:3000/
 ```
 
-## Acessar o sistema
+O frontend está localizado na pasta `public/`.
 
-Com o servidor em execução, abra no navegador:
+### 7. Verificar a API
 
-```
+Acesse:
 
-[http://localhost:3000/](http://localhost:3000/)
-
-```
-
-O frontend localizado na pasta `public/` será carregado pelo servidor.
-
-## Verificar a API
-
-Para verificar se a API está funcionando, acesse:
-
-```
-
-[http://localhost:3000/health](http://localhost:3000/health)
-
+```text
+http://localhost:3000/health
 ```
 
 Resposta esperada:
 
-```
-
+```text
 {
-"success": true,
-"message": "API LogiTech Express online"
+  "success": true,
+  "message": "API LogiTech Express online"
 }
-
 ```
 
 ## Endpoints
 
 ### Motoristas
 
-- GET /motoristas
-- GET /motoristas/:id
-- POST /motoristas
-- PUT /motoristas/:id
-- DELETE /motoristas/:id
+* GET /motoristas
+* GET /motoristas/:id
+* POST /motoristas
+* PUT /motoristas/:id
+* DELETE /motoristas/:id
 
 ### Veículos
 
-- GET /veiculos
-- GET /veiculos/:id
-- POST /veiculos
-- PUT /veiculos/:id
-- DELETE /veiculos/:id
+* GET /veiculos
+* GET /veiculos/:id
+* POST /veiculos
+* PUT /veiculos/:id
+* DELETE /veiculos/:id
 
 ### Entregas
 
-- GET /entregas
-- GET /entregas/:id
-- POST /entregas
-- PUT /entregas/:id
-- DELETE /entregas/:id
-
-### Health Check
-
-- GET /health
-
-## Testes
-
-Os endpoints podem ser testados utilizando ferramentas como:
-
-- Postman
-- Thunder Client
-- Insomnia
-- Navegador para requisições GET
-
-Os testes da API estão documentados no arquivo:
-
-```
-
-TESTES.md
-
-```
+* GET /entregas
+* GET /entregas/:id
+* POST /entregas
+* PUT /entregas/:id
+* DELETE /entregas/:id
 
 ## Segurança
 
@@ -224,31 +162,4 @@ O arquivo `.env` não deve ser versionado, sendo ignorado pelo Git através do `
 
 Nunca compartilhe credenciais do banco de dados.
 
-## Execução rápida
-
-Depois de configurar o banco de dados e o `.env`:
-
 ```
-
-npm install
-npm start
-
-```
-
-Acesse:
-
-```
-
-[http://localhost:3000/](http://localhost:3000/)
-
-```
-
-Para verificar a API:
-
-```
-
-[http://localhost:3000/health](http://localhost:3000/health)
-
-```
-```
-S
