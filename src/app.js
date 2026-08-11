@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+const { initializeDatabase } = require('./config/database');
 const motoristaRoutes = require('./routes/motoristaRoutes');
 const veiculoRoutes = require('./routes/veiculoRoutes');
 const entregaRoutes = require('./routes/entregaRoutes');
@@ -25,6 +26,11 @@ app.use((err, req, res, next) => {
 
 if (require.main === module) {
   const port = process.env.PORT || 3000;
-  app.listen(port, () => console.log(`LogiTech Express rodando na porta ${port}`));
+  initializeDatabase()
+    .then(() => app.listen(port, () => console.log(`LogiTech Express rodando na porta ${port}`)))
+    .catch((error) => {
+      console.error('Não foi possível inicializar o banco de dados:', error.message);
+      process.exit(1);
+    });
 }
 module.exports = app;
