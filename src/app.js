@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const { initializeDatabase } = require('./config/database');
@@ -8,7 +9,7 @@ const veiculoRoutes = require('./routes/veiculoRoutes');
 const entregaRoutes = require('./routes/entregaRoutes');
 
 const app = express();
-
+app.use(express.static(path.join(__dirname, '../public')));
 app.use(cors({ origin: process.env.CORS_ORIGIN || '*' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -20,9 +21,9 @@ app.get('/health', (req, res) => {
   });
 });
 
-app.use(motoristaRoutes);
-app.use(veiculoRoutes);
-app.use(entregaRoutes);
+app.use('/api', motoristaRoutes);
+app.use('/api', veiculoRoutes);
+app.use('/api', entregaRoutes);
 
 app.use((req, res) => {
   res.status(404).json({
