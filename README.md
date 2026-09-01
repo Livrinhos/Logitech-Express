@@ -178,7 +178,7 @@ As rotas da API utilizam o prefixo `/api`.
 
 ## Testes
 
-Os testes automatizados estão localizados em `tests/app.test.js` e utilizam **Jest** e **Supertest**.
+Os testes automatizados estão localizados em `tests/app.test.js` e utilizam **Jest** e **Supertest**. Eles são testes de integração, utilizando o Supertest para enviar requisições HTTP diretamente à aplicação Express.
 
 Para executar:
 
@@ -188,10 +188,14 @@ npm test
 
 ### Cenários validados
 
-- **Caminho feliz (200):** verifica o funcionamento da rota `/health` e a listagem de motoristas.
-- **Erro 404:** verifica o comportamento para rotas inexistentes e para um motorista que não foi encontrado.
-- **Erro 400:** verifica a validação de dados obrigatórios no cadastro de motorista.
-- **Mutações:** verifica as operações de criação (`POST`), atualização (`PUT`) e exclusão (`DELETE`) de motoristas.
+- **Caminho feliz (200):** verifica a listagem de motoristas e a busca de um motorista existente, incluindo propriedades do objeto retornado.
+- **Erro 404:** verifica uma rota inexistente e a busca de um motorista que não existe.
+- **Erro 400:** verifica a rejeição de um cadastro sem o campo obrigatório `nome`.
+- **Mutação POST (201):** verifica a criação de um motorista e a existência do `id` retornado.
+- **Mutação PUT (200):** verifica a atualização dos dados de um motorista e confirma o novo nome retornado.
+- **Mutação DELETE (200):** verifica a exclusão e, em seguida, confirma por meio de um GET que o registro não existe mais (404).
+
+Os testes utilizam `describe()`, `test()`, `expect()`, `toBe()` e `toHaveProperty()` para organizar os cenários e validar os resultados.
 
 ## Segurança
 
