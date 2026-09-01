@@ -2,10 +2,10 @@ const request = require('supertest');
 const app = require('../src/app');
 const db = require('../src/config/database');
 
-const criarMotorista = () => ({
+const criarMotorista = (telefone = `(49) 99999-${Date.now().toString().slice(-4)}`) => ({
   nome: 'Motorista Teste',
   cpf: String(Date.now()).slice(-11),
-  telefone: '(49) 99999-9999',
+  telefone,
 });
 
 describe('Testes de Integração - API LogiTech Express', () => {
@@ -28,11 +28,7 @@ describe('Testes de Integração - API LogiTech Express', () => {
 
   test('Caminho feliz: GET /api/motoristas/:id deve retornar o motorista', async () => {
     const motorista = criarMotorista();
-
-    const criado = await request(app)
-      .post('/api/motoristas')
-      .send(motorista);
-
+    const criado = await request(app).post('/api/motoristas').send(motorista);
     const id = criado.body.data.id;
 
     const response = await request(app).get(`/api/motoristas/${id}`);
@@ -63,22 +59,32 @@ describe('Testes de Integração - API LogiTech Express', () => {
   test('Erro 400: POST sem nome deve retornar 400', async () => {
     const response = await request(app)
       .post('/api/motoristas')
-      .send({
-        cpf: String(Date.now()).slice(-11),
-        telefone: '(49) 99999-9999',
-      });
+      .send({ cpf: String(Date.now()).slice(-11), telefone: criarMotorista().telefone });
 
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
     expect(response.body).toHaveProperty('message', 'Nome do motorista é obrigatório');
   });
 
+  test('Erro 409: POST com telefone já cadastrado deve retornar 409', async () => {
+    const telefone = criarMotorista().telefone;
+    const primeiro = criarMotorista(telefone);
+    const segundo = criarMotorista(telefone);
+
+    const criado = await request(app).post('/api/motoristas').send(primeiro);
+    const response = await request(app).post('/api/motoristas').send(segundo);
+
+    expect(criado.statusCode).toBe(201);
+    expect(response.statusCode).toBe(409);
+    expect(response.body.success).toBe(false);
+    expect(response.body).toHaveProperty('message', 'Telefone já cadastrado');
+
+    await request(app).delete(`/api/motoristas/${criado.body.data.id}`);
+  });
+
   test('Mutação: POST deve criar um motorista com status 201', async () => {
     const motorista = criarMotorista();
-
-    const response = await request(app)
-      .post('/api/motoristas')
-      .send(motorista);
+    const response = await request(app).post('/api/motoristas').send(motorista);
 
     expect(response.statusCode).toBe(201);
     expect(response.body.success).toBe(true);
@@ -90,20 +96,12 @@ describe('Testes de Integração - API LogiTech Express', () => {
 
   test('Mutação: PUT deve atualizar um motorista', async () => {
     const motorista = criarMotorista();
-
-    const criado = await request(app)
-      .post('/api/motoristas')
-      .send(motorista);
-
+    const criado = await request(app).post('/api/motoristas').send(motorista);
     const id = criado.body.data.id;
 
     const response = await request(app)
       .put(`/api/motoristas/${id}`)
-      .send({
-        nome: 'Motorista Atualizado',
-        cpf: motorista.cpf,
-        telefone: '(49) 98888-8888',
-      });
+      .send({ nome: 'Motorista Atualizado', cpf: motorista.cpf, telefone: criarMotorista().telefone });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.success).toBe(true);
@@ -115,11 +113,7 @@ describe('Testes de Integração - API LogiTech Express', () => {
 
   test('Mutação: DELETE deve remover o motorista e o GET seguinte deve retornar 404', async () => {
     const motorista = criarMotorista();
-
-    const criado = await request(app)
-      .post('/api/motoristas')
-      .send(motorista);
-
+    const criado = await request(app).post('/api/motoristas').send(motorista);
     const id = criado.body.data.id;
 
     const response = await request(app).delete(`/api/motoristas/${id}`);
@@ -128,7 +122,6 @@ describe('Testes de Integração - API LogiTech Express', () => {
     expect(response.body.success).toBe(true);
 
     const buscaAposDelete = await request(app).get(`/api/motoristas/${id}`);
-
     expect(buscaAposDelete.statusCode).toBe(404);
     expect(buscaAposDelete.body).toHaveProperty('message', 'Motorista não encontrado');
   });
