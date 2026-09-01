@@ -150,37 +150,48 @@ Resposta esperada:
 
 ## Endpoints
 
+As rotas da API utilizam o prefixo `/api`.
+
 ### Motoristas
 
-* GET /motoristas
-* GET /motoristas/:id
-* POST /motoristas
-* PUT /motoristas/:id
-* DELETE /motoristas/:id
+* GET /api/motoristas
+* GET /api/motoristas/:id
+* POST /api/motoristas
+* PUT /api/motoristas/:id
+* DELETE /api/motoristas/:id
 
 ### Veículos
 
-* GET /veiculos
-* GET /veiculos/:id
-* POST /veiculos
-* PUT /veiculos/:id
-* DELETE /veiculos/:id
+* GET /api/veiculos
+* GET /api/veiculos/:id
+* POST /api/veiculos
+* PUT /api/veiculos/:id
+* DELETE /api/veiculos/:id
 
 ### Entregas
 
-* GET /entregas
-* GET /entregas/:id
-* POST /entregas
-* PUT /entregas/:id
-* DELETE /entregas/:id
+* GET /api/entregas
+* GET /api/entregas/:id
+* POST /api/entregas
+* PUT /api/entregas/:id
+* DELETE /api/entregas/:id
 
 ## Testes
 
-Para executar os testes automatizados:
+Os testes automatizados estão localizados em `tests/app.test.js` e utilizam **Jest** e **Supertest**.
+
+Para executar:
 
 ```bash
 npm test
 ```
+
+### Cenários validados
+
+- **Caminho feliz (200):** verifica o funcionamento da rota `/health` e a listagem de motoristas.
+- **Erro 404:** verifica o comportamento para rotas inexistentes e para um motorista que não foi encontrado.
+- **Erro 400:** verifica a validação de dados obrigatórios no cadastro de motorista.
+- **Mutações:** verifica as operações de criação (`POST`), atualização (`PUT`) e exclusão (`DELETE`) de motoristas.
 
 ## Segurança
 
