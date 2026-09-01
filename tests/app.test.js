@@ -4,7 +4,7 @@ const db = require('../src/config/database');
 
 const criarMotorista = (telefone = `(49) 99999-${Date.now().toString().slice(-4)}`) => ({
   nome: 'Motorista Teste',
-  cpf: String(Date.now()).slice(-11),
+  cpf: `${Date.now()}${Math.floor(Math.random() * 1000)}`.slice(-11),
   telefone,
 });
 
@@ -57,9 +57,11 @@ describe('Testes de Integração - API LogiTech Express', () => {
   });
 
   test('Erro 400: POST sem nome deve retornar 400', async () => {
+    const motorista = criarMotorista();
+
     const response = await request(app)
       .post('/api/motoristas')
-      .send({ cpf: String(Date.now()).slice(-11), telefone: criarMotorista().telefone });
+      .send({ cpf: motorista.cpf, telefone: motorista.telefone });
 
     expect(response.statusCode).toBe(400);
     expect(response.body.success).toBe(false);
